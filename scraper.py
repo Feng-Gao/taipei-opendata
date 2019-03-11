@@ -127,7 +127,7 @@ for i in range(package_count+1):
                                     "resource_updated":'NULL',
                                     "resource_row_num":'NULL',
                                     "resource_column_num":'NULL',
-                                    "resource_size":'NULL'e                                    
+                                    "resource_size":'NULL'                              
                                     })
         print('****************end---'+package_name+'---end****************')
 
