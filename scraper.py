@@ -1,9 +1,8 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 
 #a quick and dirty script to scrape/harvest resource-level metadata records from data.gov.sg
 #the original purpose of this work is to support the ongoing international city open data index project led by SASS
 
-from urllib.request import urlopen
 import requests
 import scraperwiki
 from bs4 import BeautifulSoup
