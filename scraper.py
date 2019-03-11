@@ -25,7 +25,7 @@ for i in range(package_count+1):
     for p in package_list:
         package_id = p['id']
         package_name = '"'+p['title']+'"'
-        print(package_name)
+        print(package_id)
         #taipei has intersting situation. The organizationName actually determine what organization name may appear in front UI
         #but sometime the value is "", and in such case we can check orgName
         #if both "" or null, then mark Blank or MISSING accordingly
