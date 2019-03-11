@@ -15,6 +15,9 @@ taipei_url = base_url + str(index)
 result = requests.get(taipei_url)
 package_count = result.json()['result']['count']
 index_count = int(package_count / 100)
+
+dataset_count = 0
+resource_count = 0
 for i in range(package_count+1):
     index = i*100
     taipei_url = base_url + str(index)
@@ -23,6 +26,7 @@ for i in range(package_count+1):
     
     # iterate each dataset
     for p in package_list:
+        dataset_count += 1
         package_id = p['id']
         package_name = '"'+p['title']+'"'
         print(package_id)
@@ -51,6 +55,7 @@ for i in range(package_count+1):
         print(package_resource_num)
         # iterate the list of resources included in the package
         for r in package_resources:
+            resource_count += 1
             # fetch resrouce details
             #in some cases, resource name may contain comma wrap it up in quotes
             resource_id = r['resourceId']
@@ -85,7 +90,7 @@ for i in range(package_count+1):
 
             #package detail + resource detail as one record
   
-            scraperwiki.sqlite.save(data={
+            scraperwiki.sqlite.save(unique_keys=['resource_count'],data={
                                     "id":package_id,
                                     "name": package_name, 
                                     "description": package_desc,
@@ -109,7 +114,10 @@ for i in range(package_count+1):
         
         #in case there is no resource we then just write package details into csv
         if package_resource_num == 0:
-            scraperwiki.sqlite.save(data={
+            resource_count += 1
+            scraperwiki.sqlite.save(unique_keys=['resource_count'],data={
+                                    "dataset_count":dataset_count,
+                                    "resource_count":resource_count,
                                     "id":package_id,
                                     "name": package_name, 
                                     "description": package_desc,
