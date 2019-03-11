@@ -91,6 +91,8 @@ for i in range(package_count+1):
             #package detail + resource detail as one record
   
             scraperwiki.sqlite.save(unique_keys=['resource_count'],data={
+                                    "dataset_count":dataset_count,
+                                    "resource_count":resource_count,
                                     "id":package_id,
                                     "name": package_name, 
                                     "description": package_desc,
