@@ -85,7 +85,7 @@ for i in range(package_count+1):
 
             #package detail + resource detail as one record
   
-            scraperwiki.sqlite.save(unique_keys=['id'], data={
+            scraperwiki.sqlite.save(data={
                                     "id":package_id,
                                     "name": package_name, 
                                     "description": package_desc,
@@ -109,7 +109,7 @@ for i in range(package_count+1):
         
         #in case there is no resource we then just write package details into csv
         if package_resource_num == 0:
-            scraperwiki.sqlite.save(unique_keys=['id'], data={
+            scraperwiki.sqlite.save(data={
                                     "id":package_id,
                                     "name": package_name, 
                                     "description": package_desc,
