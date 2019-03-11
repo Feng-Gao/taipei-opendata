@@ -10,15 +10,15 @@ from bs4 import BeautifulSoup
 
 #taipei provides an api to fetch all metadata
 base_url = 'https://data.taipei/opendata/datalist/apiAccess?scope=datasetMetadataSearch&limit=100&offset='
-index = 0
+index = ENV['MORPH_INDEX']
 taipei_url = base_url + str(index)
 result = requests.get(taipei_url)
 package_count = result.json()['result']['count']
 index_count = int(package_count / 100)
 
-dataset_count = 0
-resource_count = 0
-for i in range(package_count+1):
+dataset_count = ENV['MORPH_DCOUNT']
+resource_count = ENV['MORPH_RCOUNT']
+for i in range(index,package_count+1):
     index = i*100
     taipei_url = base_url + str(index)
     result = requests.get(taipei_url)
