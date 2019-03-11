@@ -3,6 +3,7 @@
 #a quick and dirty script to scrape/harvest resource-level metadata records from data.gov.sg
 #the original purpose of this work is to support the ongoing international city open data index project led by SASS
 
+import os
 import requests
 import scraperwiki
 from bs4 import BeautifulSoup
@@ -10,14 +11,14 @@ from bs4 import BeautifulSoup
 
 #taipei provides an api to fetch all metadata
 base_url = 'https://data.taipei/opendata/datalist/apiAccess?scope=datasetMetadataSearch&limit=100&offset='
-index = ENV['MORPH_INDEX']
+index = os.environ['MORPH_INDEX']
 taipei_url = base_url + str(index)
 result = requests.get(taipei_url)
 package_count = result.json()['result']['count']
 index_count = int(package_count / 100)
 
-dataset_count = ENV['MORPH_DCOUNT']
-resource_count = ENV['MORPH_RCOUNT']
+dataset_count = os.environ['MORPH_DCOUNT']
+resource_count = os.environ['MORPH_RCOUNT']
 for i in range(index,package_count+1):
     index = i*100
     taipei_url = base_url + str(index)
