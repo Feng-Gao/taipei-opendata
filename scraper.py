@@ -21,11 +21,18 @@ index_count = int(package_count / 100)
 
 dataset_count = int(os.environ['MORPH_DCOUNT'])
 resource_count = int(os.environ['MORPH_RCOUNT'])
+error_page=[]
 for i in range(index,package_count+1):
     index = i*100 + index_offset
     taipei_url = base_url % (limit,index)
     result = requests.get(taipei_url)
-    package_list = result.json()['result']['results']
+    try:
+        package_list = result.json()['result']['results']
+    except Exception as ex:
+        #for weired reason, sometimes the api may return bad gateway error so we need to record the problem i (index) and jump the current index
+        print(ex)
+        error_page.append(i)
+        continue
     
     # iterate each dataset
     for p in package_list:
