@@ -85,11 +85,15 @@ for i in range(index,package_count+1):
             resource_url = "https://data.taipei/dataset/detail/preview?id="+package_id+"&rid="+resource_id
             result = requests.get(resource_url)
             soup = BeautifulSoup(result.content,features="lxml")
-            #locate resource name via <div class=class="q-a_titile"><h6>resource name </h6></div>
-            resource_name = '"'+soup.find(attrs={"class":"q-a_titile"}).h6.text+'"'
-            #locate resource description via id=detailContent, which is a table, and get the second tr and its second th's text value
-            resource_desc = '"'+ soup.find(attrs={"id":"detailContent"}).contents[3].contents[1].contents[0] +'"'
-
+            try:
+                #locate resource name via <div class=class="q-a_titile"><h6>resource name </h6></div>
+                resource_name = '"'+soup.find(attrs={"class":"q-a_titile"}).h6.text+'"'
+                #locate resource description via id=detailContent, which is a table, and get the second tr and its second th's text value
+                resource_desc = '"'+ soup.find(attrs={"id":"detailContent"}).contents[3].contents[1].contents[0] +'"'
+            except Exception as ex:
+                print(ex)
+                resource_name = "BROKEN LINK"
+                resource_desc = "BROKEN LINK"
 
             #package detail + resource detail as one record
   
