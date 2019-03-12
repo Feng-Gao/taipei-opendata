@@ -12,8 +12,8 @@ from bs4 import BeautifulSoup
 #taipei provides an api to fetch all metadata
 base_url = 'https://data.taipei/opendata/datalist/apiAccess?scope=datasetMetadataSearch&limit=%d&offset=%d'
 index = int(os.environ['MORPH_INDEX'])
-limit = int(os.environ['MORPH_LIMIT']
-index_offset = int(os.environ['MORPH_OFFSET']
+limit = int(os.environ['MORPH_LIMIT'])
+index_offset = int(os.environ['MORPH_OFFSET'])
 taipei_url = base_url + str(index)
 result = requests.get(taipei_url)
 package_count = result.json()['result']['count']
