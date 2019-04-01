@@ -57,7 +57,7 @@ for i in range(index,package_count+1):
         package_tags = '"'+p['tag']+'"' if p['tag'] else 'BLANK'
         package_created = p['issued'] if p['issued'] else 'BLANK'
         package_updated = p['metadata_modified'] if p['metadata_modified'] else 'BLANK'
-        package_frequency = '"'+p['accrualPeriodicit']+'"'if p.get('accrualPeriodicit','') else 'MISSING'
+        package_frequency = '"'+p['accrualPeriodicity']+'"'if p.get('accrualPeriodicity','') else 'MISSING'
 
         #in some case, the field may be missing
         package_resources = p['resources']
