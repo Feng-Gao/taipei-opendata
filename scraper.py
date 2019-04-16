@@ -79,7 +79,7 @@ for i in range(index,package_count+1):
             package_view = p['diagrams'][0]['dataCount'][0]
             package_download = p['diagrams'][1]['dataCount'][0]
         except:
-            print(“view and download error')
+            print('view and download error')
             package_view = 0
             package_download = 0
              
