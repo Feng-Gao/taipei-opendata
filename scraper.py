@@ -51,7 +51,7 @@ for i in range(index,package_count+1):
         #if both "" or null, then mark Blank or MISSING accordingly
         
         meta_url = 'https://data.taipei/api/getDatasetInfo/getIDDetail?id='+package_id
-        result = requests.get(meta_url).json
+        result = requests.get(meta_url).json()
         if result['success'] == False:
             error_id.append(i)
             continue
