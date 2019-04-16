@@ -8,6 +8,11 @@ import requests
 import scraperwiki
 from bs4 import BeautifulSoup
 
+import sys
+
+reload(sys)
+sys.setdefaultencoding('utf8')
+
 
 #taipei provides an api to fetch all metadata
 base_url = 'https://data.taipei/opendata/datalist/apiAccess?scope=datasetMetadataSearch&limit=%d&offset=%d'
