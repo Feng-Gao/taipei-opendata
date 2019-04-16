@@ -171,3 +171,6 @@ for i in range(index,package_count+1):
                                     })
         print('****************end---'+package_id+'---end****************')
 
+print(error_id)
+print('-----error_page-------')
+print(error_page)
