@@ -89,6 +89,7 @@ for i in range(index,package_count+1):
             # fetch resrouce details
             #in some cases, resource name may contain comma wrap it up in quotes
             resource_id = r['resourceId']
+            print(resource_id)
             resource_name = r['resourceName']
             resource_desc = r['resourceDescription'] if r['resourceDescription'] else 'BLANK'
             resource_format = '"'+r['format']+'"'
