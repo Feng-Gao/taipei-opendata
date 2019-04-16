@@ -22,6 +22,7 @@ index_count = int(package_count / 100)
 dataset_count = int(os.environ['MORPH_DCOUNT'])
 resource_count = int(os.environ['MORPH_RCOUNT'])
 error_page=[]
+error_id=[]
 for i in range(index,package_count+1):
     index = i*100 + index_offset
     taipei_url = base_url % (limit,index)
@@ -43,6 +44,15 @@ for i in range(index,package_count+1):
         #taipei has intersting situation. The organizationName actually determine what organization name may appear in front UI
         #but sometime the value is "", and in such case we can check orgName
         #if both "" or null, then mark Blank or MISSING accordingly
+        
+        meta_url = 'https://data.taipei/api/getDatasetInfo/getIDDetail?id='+package_id
+        result = requests.get(meta_url).json
+        if !result['success']:
+            error_id.append(i)
+            continue
+            
+        p=result['payload']
+        
         package_org = p['organizationName'] if p['organizationName']!= "" else p["orgName"]
 
         if package_org == "" or not package_org:
@@ -54,11 +64,21 @@ for i in range(index,package_count+1):
         #may have multiple topics
         package_topics = '"'+p['category']+'"' if p.get('category','')!= '' else 'MISSING'
         #may have multiple topics or keyword is null
-        package_tags = '"'+p['tag']+'"' if p['tag'] else 'BLANK'
-        package_created = p['issued'] if p['issued'] else 'BLANK'
+        package_tags = '"'+p['keyword']+'"' if p['keyword'] else 'BLANK'
+        package_created = p['metadata_created'] if p['metadata_created'] else 'BLANK'
+        package_issued = p['issued'] if p['issued'] else 'BLANK'
         package_updated = p['metadata_modified'] if p['metadata_modified'] else 'BLANK'
         package_frequency = '"'+p['accrualPeriodicity']+'"'if p.get('accrualPeriodicity','') else 'MISSING'
-
+        
+        try:
+            package_view = p['diagrams'][0]['dataCount'][0]
+            package_download = p['diagrams'][1]['dataCount'][0]
+        except:
+            print(“view and download error')
+            package_view = 0
+            package_download = 0
+             
+        
         #in some case, the field may be missing
         package_resources = p['resources']
         package_resource_num = len(package_resources)
@@ -69,10 +89,12 @@ for i in range(index,package_count+1):
             # fetch resrouce details
             #in some cases, resource name may contain comma wrap it up in quotes
             resource_id = r['resourceId']
-            print(resource_id)
+            resource_name = r['resourceName']
+            resource_desc = r['resourceDescription'] if r['resourceDescription'] else 'BLANK'
             resource_format = '"'+r['format']+'"'
             resource_created = 'BLANK'
             resource_updated = r['resourceUpdate'] if r['resourceUpdate'] else 'BLANK'
+            resource_api = r['hasDatastore']
 
             #taipei provides resource content level api so we can get exact row num and calculate column num_resources
             resource_api_url = "https://data.taipei/opendata/datalist/apiAccess?scope=resourceAquire&rid=" + resource_id
@@ -87,20 +109,6 @@ for i in range(index,package_count+1):
                 #fetch one row and minus the row_id field to be the column num
                 resource_column_num = len(result.json()['result']['results'][0])-1
             resource_size = resource_row_num * resource_column_num
-
-            #to fetch resource real name and descripton you need to open the page and parse the html
-            resource_url = "https://data.taipei/dataset/detail/preview?id="+package_id+"&rid="+resource_id
-            result = requests.get(resource_url)
-            soup = BeautifulSoup(result.content,features="lxml")
-            try:
-                #locate resource name via <div class=class="q-a_titile"><h6>resource name </h6></div>
-                resource_name = '"'+soup.find(attrs={"class":"q-a_titile"}).h6.text+'"'
-                #locate resource description via id=detailContent, which is a table, and get the second tr and its second th's text value
-                resource_desc = '"'+ soup.find(attrs={"id":"detailContent"}).contents[3].contents[1].contents[0] +'"'
-            except Exception as ex:
-                print(ex)
-                resource_name = "BROKEN LINK"
-                resource_desc = "BROKEN LINK"
 
             #package detail + resource detail as one record
   
@@ -124,7 +132,8 @@ for i in range(index,package_count+1):
                                     "resource_updated":resource_updated,
                                     "resource_row_num":resource_row_num,
                                     "resource_column_num":resource_column_num,
-                                    "resource_size":resource_size                                    
+                                    "resource_size":resource_size,
+                                    "resource_api":resource_api
                                     })
         
         
@@ -151,7 +160,8 @@ for i in range(index,package_count+1):
                                     "resource_updated":'NULL',
                                     "resource_row_num":'NULL',
                                     "resource_column_num":'NULL',
-                                    "resource_size":'NULL'                              
+                                    "resource_size":'NULL',
+                                    "resource_api":'NULL'
                                     })
         print('****************end---'+package_id+'---end****************')
 
