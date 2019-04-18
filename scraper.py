@@ -19,7 +19,7 @@ base_url = 'https://data.taipei/opendata/datalist/apiAccess?scope=datasetMetadat
 index = int(os.environ['MORPH_INDEX'])
 limit = int(os.environ['MORPH_LIMIT'])
 index_offset = int(os.environ['MORPH_OFFSET'])
-taipei_url = base_url + str(index)
+taipei_url = base_url
 result = requests.get(taipei_url)
 package_count = result.json()['result']['count']
 index_count = int(package_count / 100)
@@ -28,7 +28,7 @@ dataset_count = int(os.environ['MORPH_DCOUNT'])
 resource_count = int(os.environ['MORPH_RCOUNT'])
 error_page=[]
 error_id=[]
-for i in range(index,package_count+1):
+for i in range(2,3):
     index = i*100 + index_offset
     taipei_url = base_url % (limit,index)
     result = requests.get(taipei_url)
